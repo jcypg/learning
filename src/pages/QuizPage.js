@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { translateText } from '../services/api';
 import { removeAccents } from '../services/helpers';
 import styled from 'styled-components'; 
@@ -88,17 +88,17 @@ const phrases = [
 
 const QuizPage = () => {
   
-  const [currentPhrase, setCurrentPhrase] = useState({});
+  const [currentPhrase, setCurrentPhrase] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
 
   
-  const getRandomPhrase = () => {
+ /* const getRandomPhrase = () => {
     const randomIndex = Math.floor(Math.random() * phrases.length);
     return phrases[randomIndex];
   };
-
+*/
   
   const isAnswerCorrect = (userAnswer, correctAnswer) => {
     
@@ -107,8 +107,14 @@ const QuizPage = () => {
 
   
   const handleCheckAnswer = async () => {
+    if (!currentPhrase) return;
     const { text, targetLang } = currentPhrase;
+
+    let isMounted = true;
+
     const translation = await translateText(text, targetLang);
+
+    if (isMounted) {
     setCorrectAnswer(translation);
 
     if (isAnswerCorrect(userAnswer, translation)) {
@@ -116,26 +122,35 @@ const QuizPage = () => {
     } else {
       setFeedback(`Incorrect. The correct answer is: ${translation}`);
     }
+  }
+  return () => {
+    isMounted = false;
   };
-
+  };
   
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
+    const getRandomPhrase = () => {
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      return phrases[randomIndex];
+    };
     const newPhrase = getRandomPhrase();
     setCurrentPhrase(newPhrase);
     setUserAnswer('');
     setFeedback('');
-  };
+  }, []);
 
   
   useEffect(() => {
-    
-  }, []);
-handleNext();
+    handleNext();
+  }, [handleNext]);
+
   return (
     <Container>
       <TextTitle>Translation Quiz</TextTitle>
-      <p>Translate "{currentPhrase.text}" to Spanish</p>
-      <Textarea
+      {currentPhrase && (
+        <>
+        <p>Translate "{currentPhrase.text}" to Spanish</p>
+         <Textarea
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
@@ -143,6 +158,8 @@ handleNext();
       />
       <Button onClick={handleCheckAnswer}>Check Answer</Button>
       <Buttonn onClick={handleNext}>Next</Buttonn>
+      </>
+      )}
 
       {feedback && <p>{feedback}</p>}
     </Container>
