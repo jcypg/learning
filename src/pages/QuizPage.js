@@ -128,9 +128,9 @@ const QuizPage = () => {
 
   
   useEffect(() => {
-    handleNext();
+    
   }, []);
-
+handleNext();
   return (
     <Container>
       <TextTitle>Translation Quiz</TextTitle>
