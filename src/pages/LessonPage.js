@@ -26,7 +26,7 @@ const VideoTitle = styled.h3`
 
 const LessonPage = () => {
   const [videos, setVideos] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('English class');
+  const [searchQuery] = useState('English class');
 
   useEffect(() => {
     const fetchVideos = async () => {

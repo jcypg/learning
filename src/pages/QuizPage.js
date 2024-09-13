@@ -90,7 +90,7 @@ const QuizPage = () => {
   
   const [currentPhrase, setCurrentPhrase] = useState({});
   const [userAnswer, setUserAnswer] = useState('');
-  const [correctAnswer, setCorrectAnswer] = useState('');
+  const [setCorrectAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
 
   
@@ -129,7 +129,7 @@ const QuizPage = () => {
   
   useEffect(() => {
     handleNext();
-  }, []);
+  }, );
 
   return (
     <Container>
