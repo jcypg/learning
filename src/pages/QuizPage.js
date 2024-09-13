@@ -90,7 +90,7 @@ const QuizPage = () => {
   
   const [currentPhrase, setCurrentPhrase] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
-  const [correctAnswer, setCorrectAnswer] = useState('');
+  //const [correctAnswer, setCorrectAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
 
   
@@ -115,7 +115,7 @@ const QuizPage = () => {
     const translation = await translateText(text, targetLang);
 
     if (isMounted) {
-    setCorrectAnswer(translation);
+    //setCorrectAnswer(translation);
 
     if (isAnswerCorrect(userAnswer, translation)) {
       setFeedback('Correct!');
